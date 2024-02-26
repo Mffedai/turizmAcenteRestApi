@@ -1,3 +1,4 @@
+/*
 package dev.patika.turizmAcente.core.authentication;
 
 import dev.patika.turizmAcente.business.concretes.UserManager;
@@ -38,3 +39,4 @@ public class AuthenticationProvider implements org.springframework.security.auth
         return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package dev.patika.turizmAcente.core.authentication;
 
 import dev.patika.turizmAcente.core.authentication.AuthenticationProvider;
@@ -37,7 +38,6 @@ public class SecurityConfig {
                 );
         return http.build();
     }
-
     @Bean
     public UserDetailsService userDetailsService() {
         var user = User
@@ -53,10 +53,10 @@ public class SecurityConfig {
 
         return new InMemoryUserDetailsManager(user1);
     }
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
 }
+*/

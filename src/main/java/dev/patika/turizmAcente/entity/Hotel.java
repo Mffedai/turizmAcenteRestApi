@@ -59,6 +59,10 @@ public class Hotel extends BaseEntity {
     @JsonIgnore
     private List<Session> sessionList;
 
+    @OneToMany(mappedBy = "hotel")
+    @JsonIgnore
+    private List<Room> roomList;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "hotel2pensions",

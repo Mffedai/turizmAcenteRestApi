@@ -2,10 +2,7 @@ package dev.patika.turizmAcente.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.patika.turizmAcente.core.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +19,10 @@ import java.util.List;
 public class Pension extends BaseEntity {
     @Column(name = "pension_name", nullable = false)
     private Type type;
+
+    @OneToMany(mappedBy = "pension")
+    @JsonIgnore
+    private List<Room> roomList;
 
     @ManyToMany(mappedBy = "pensionList")
     @JsonIgnore
