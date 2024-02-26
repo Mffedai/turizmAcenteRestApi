@@ -1,8 +1,11 @@
 package dev.patika.turizmAcente.dto.request.hotel;
 
+import dev.patika.turizmAcente.entity.Pension;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,4 +25,5 @@ public class HotelUpdateRequest {
     private boolean fitness;
     private boolean spa;
     private boolean service;
+    private List<Pension> pensionList;
 }

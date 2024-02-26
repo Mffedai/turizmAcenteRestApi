@@ -9,6 +9,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -31,6 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/hello/**").hasAuthority("ADMIN")
                         .requestMatchers("/v1/admins/**").permitAll()
+                        .requestMatchers("/v1/pensions/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
@@ -43,13 +45,18 @@ public class SecurityConfig {
                 .password("bb")
                 .authorities("read")
                 .build();
+        var user1 = User
+                .withUsername("aa")
+                .password("aa")
+                .authorities("read", "create")
+                .build();
 
-        return new InMemoryUserDetailsManager(user);
+        return new InMemoryUserDetailsManager(user1);
     }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
 }

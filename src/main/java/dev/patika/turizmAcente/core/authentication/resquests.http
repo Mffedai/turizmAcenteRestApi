@@ -1,2 +1,2 @@
-GET localhost:8080/v1/admins
-Authorization: Basic bb bb
+POST localhost:8080/v1/admins
+Authorization: Basic aa aa

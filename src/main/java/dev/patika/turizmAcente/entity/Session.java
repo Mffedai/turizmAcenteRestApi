@@ -25,6 +25,6 @@ public class Session extends BaseEntity {
     private LocalDate fnshDate;
 
     @ManyToOne()
-    @JoinColumn(name = "session_hotel_id", referencedColumnName = "hotel_id")
+    @JoinColumn(name = "session_hotel_id")
     private Hotel hotel;
 }

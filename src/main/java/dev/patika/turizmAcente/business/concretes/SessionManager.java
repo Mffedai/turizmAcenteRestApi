@@ -1,37 +1,53 @@
 package dev.patika.turizmAcente.business.concretes;
 
 import dev.patika.turizmAcente.business.abstracts.ISessionService;
+import dev.patika.turizmAcente.core.config.modelMapper.IModelMapperService;
+import dev.patika.turizmAcente.core.exception.NotFoundException;
 import dev.patika.turizmAcente.core.result.ResultData;
+import dev.patika.turizmAcente.core.utilies.Msg;
+import dev.patika.turizmAcente.core.utilies.ResultHelper;
+import dev.patika.turizmAcente.dao.SessionRepo;
 import dev.patika.turizmAcente.dto.request.session.SessionSaveRequest;
 import dev.patika.turizmAcente.dto.response.session.SessionResponse;
 import dev.patika.turizmAcente.entity.Session;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class SessionManager implements ISessionService {
+    private final SessionRepo sessionRepo;
+    private final IModelMapperService modelMapperService;
     @Override
     public ResultData<SessionResponse> save(SessionSaveRequest sessionSaveRequest) {
-        return null;
+        Session saveSession = this.modelMapperService.forRequest().map(sessionSaveRequest, Session.class);
+        return ResultHelper.created(this.modelMapperService.forResponse().map(this.sessionRepo.save(saveSession), SessionResponse.class));
     }
 
     @Override
     public Session get(Long id) {
-        return null;
+        return this.sessionRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND));
     }
 
     @Override
     public Page<Session> cursor(int page, int pageSize) {
-        return null;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return this.sessionRepo.findAll(pageable);
     }
 
     @Override
-    public Session update(Session entity) {
-        return null;
+    public Session update(Session session) {
+        this.get(session.getId());
+        return this.sessionRepo.save(session);
     }
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        Session session = this.get(id);
+        this.sessionRepo.delete(session);
+        return true;
     }
 }

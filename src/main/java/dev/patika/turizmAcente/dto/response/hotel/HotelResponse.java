@@ -1,10 +1,13 @@
 package dev.patika.turizmAcente.dto.response.hotel;
 
+import dev.patika.turizmAcente.entity.Pension;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -24,4 +27,5 @@ public class HotelResponse {
     private boolean fitness;
     private boolean spa;
     private boolean service;
+    private List<Pension> pensionList;
 }
