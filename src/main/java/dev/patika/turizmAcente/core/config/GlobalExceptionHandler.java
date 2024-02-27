@@ -1,5 +1,6 @@
 package dev.patika.turizmAcente.core.config;
 
+import dev.patika.turizmAcente.core.exception.DataAlreadyExistException;
 import dev.patika.turizmAcente.core.exception.NotFoundException;
 import dev.patika.turizmAcente.core.result.Result;
 import dev.patika.turizmAcente.core.result.ResultData;
@@ -29,5 +30,9 @@ public class GlobalExceptionHandler {
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(ResultHelper.validateError(validationErrorList), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(DataAlreadyExistException.class)
+    public ResponseEntity<Result> handleDataAlreadyExistException(DataAlreadyExistException e){
+        return new ResponseEntity<>(ResultHelper.error(e.getMessage()), HttpStatus.CONFLICT);
     }
 }

@@ -1,4 +1,4 @@
-package dev.patika.turizmAcente.core;
+package dev.patika.turizmAcente.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,7 +1,6 @@
 package dev.patika.turizmAcente.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import dev.patika.turizmAcente.core.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -63,7 +62,7 @@ public class Hotel extends BaseEntity {
     @JsonIgnore
     private List<Room> roomList;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "hotel2pensions",
             joinColumns = {@JoinColumn(name = "hotel2pensions_hotel_id")},

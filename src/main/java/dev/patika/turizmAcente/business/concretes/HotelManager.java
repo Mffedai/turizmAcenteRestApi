@@ -2,6 +2,7 @@ package dev.patika.turizmAcente.business.concretes;
 
 import dev.patika.turizmAcente.business.abstracts.IHotelService;
 import dev.patika.turizmAcente.core.config.modelMapper.IModelMapperService;
+import dev.patika.turizmAcente.core.exception.DataAlreadyExistException;
 import dev.patika.turizmAcente.core.exception.NotFoundException;
 import dev.patika.turizmAcente.core.result.ResultData;
 import dev.patika.turizmAcente.core.utilies.Msg;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class HotelManager implements IHotelService {
@@ -24,8 +27,18 @@ public class HotelManager implements IHotelService {
 
     @Override
     public ResultData<HotelResponse> save(HotelSaveRequest hotelSaveRequest) {
+        Optional<Hotel> hotelList = this.findByNameAndAddressAndCityAndRegionAndPhone(
+                hotelSaveRequest.getName(),
+                hotelSaveRequest.getAddress(),
+                hotelSaveRequest.getCity(),
+                hotelSaveRequest.getRegion(),
+                hotelSaveRequest.getPhone()
+        );
+        if (hotelList.isPresent()){
+            throw new DataAlreadyExistException(Msg.getEntityForMsg(Hotel.class));
+        }
         Hotel saveHotel = this.modelMapperService.forRequest().map(hotelSaveRequest, Hotel.class);
-        return ResultHelper.created(this.modelMapperService.forResponse().map(saveHotel, HotelResponse.class));
+        return ResultHelper.created(this.modelMapperService.forResponse().map(this.hotelRepo.save(saveHotel), HotelResponse.class));
     }
 
     @Override
@@ -50,5 +63,10 @@ public class HotelManager implements IHotelService {
         Hotel hotel = this.get(id);
         this.hotelRepo.delete(hotel);
         return true;
+    }
+
+    @Override
+    public Optional<Hotel> findByNameAndAddressAndCityAndRegionAndPhone(String name, String address, String city, String region, String phone) {
+        return this.hotelRepo.findByNameAndAddressAndCityAndRegionAndPhone(name, address, city, region, phone);
     }
 }

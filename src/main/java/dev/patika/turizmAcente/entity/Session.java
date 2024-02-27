@@ -1,7 +1,6 @@
 package dev.patika.turizmAcente.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import dev.patika.turizmAcente.core.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

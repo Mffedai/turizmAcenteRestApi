@@ -1,12 +1,13 @@
 package dev.patika.turizmAcente.entity;
 
-import dev.patika.turizmAcente.core.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "rooms")
@@ -45,6 +46,9 @@ public class Room extends BaseEntity {
     @NotNull
     @Column(name = "room_fridge", nullable = false)
     private boolean fridge;
+
+    @OneToMany(mappedBy = "room")
+    private List<Reservation> reservationList;
 
     @ManyToOne()
     @JoinColumn(name = "room_hotel_id")

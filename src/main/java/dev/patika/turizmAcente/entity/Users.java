@@ -1,6 +1,5 @@
 package dev.patika.turizmAcente.entity;
 
-import dev.patika.turizmAcente.core.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

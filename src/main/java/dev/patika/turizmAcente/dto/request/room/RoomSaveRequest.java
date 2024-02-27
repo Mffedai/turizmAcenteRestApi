@@ -31,11 +31,8 @@ public class RoomSaveRequest {
     private boolean safe;
     @NotNull
     private boolean fridge;
-    @NotNull
     private Integer hotelId;
-    @NotNull
     private Integer pensionId;
-    @NotNull
     private Integer sessionId;
     @NotNull
     private Room.Type type;
