@@ -21,7 +21,7 @@ public class Users extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false)
-    private Role Role;
+    private Role role;
 
     public enum Role {
         ADMIN,

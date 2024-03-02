@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class RoomController {
     private final IRoomService roomService;
-    private final IModelMapperService modelMapperService;
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<RoomResponse> save(@Valid @RequestBody RoomSaveRequest roomSaveRequest){
@@ -30,10 +29,7 @@ public class RoomController {
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<RoomResponse> update(@Valid @RequestBody RoomUpdateRequest roomUpdateRequest){
-        this.roomService.get(roomUpdateRequest.getId());
-        Room updateRoom = this.modelMapperService.forRequest().map(roomUpdateRequest, Room.class);
-        this.roomService.update(updateRoom);
-        return ResultHelper.success(this.modelMapperService.forResponse().map(updateRoom, RoomResponse.class));
+        return this.roomService.update(roomUpdateRequest);
     }
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
@@ -41,9 +37,7 @@ public class RoomController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
     ){
-        Page<Room> roomPage = this.roomService.cursor(page, pageSize);
-        Page<RoomResponse> roomResponsePage = roomPage.map(room -> this.modelMapperService.forResponse().map(room, RoomResponse.class));
-        return ResultHelper.cursor(roomResponsePage);
+        return this.roomService.cursor(page, pageSize);
     }
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -51,4 +45,5 @@ public class RoomController {
         this.roomService.delete(id);
         return ResultHelper.ok();
     }
+
 }

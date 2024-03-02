@@ -31,17 +31,17 @@ public class Reservation extends BaseEntity {
 
     @NotNull(message = "Giriş tarihi alanı boş bırakılamaz")
     @Column(name = "reservation_entry_date",nullable = false)
-    private LocalDate entry_date;
+    private LocalDate entryDate;
 
     @NotNull(message = "Çıkış Tarihi alanı boş bırakılamaz")
     @Column(name = "reservation_exit_date",nullable = false)
-    private LocalDate exit_date;
+    private LocalDate exitDate;
 
     @ManyToOne()
     @JoinColumn(name = "reservation_room_id")
     private Room room;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "rsrvtn2guests",
             joinColumns = {@JoinColumn(name = "rsrvtn2guests_reservation_id")},

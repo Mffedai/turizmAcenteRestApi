@@ -21,31 +21,23 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SessionController {
     private final ISessionService sessionService;
-    private final IModelMapperService modelMapperService;
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<SessionResponse> save(@Valid @RequestBody SessionSaveRequest sessionSaveRequest){
         return this.sessionService.save(sessionSaveRequest);
     }
-
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CursorResponse<SessionResponse>> cursor(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize){
-        Page<Session> sessionPage = this.sessionService.cursor(page, pageSize);
-        Page<SessionResponse> sessionResponsePage = sessionPage.map(session -> this.modelMapperService.forResponse().map(session, SessionResponse.class));
-        return ResultHelper.cursor(sessionResponsePage);
+        return this.sessionService.cursor(page, pageSize);
     }
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<SessionResponse> update(@Valid @RequestBody SessionUpdateRequest sessionUpdateRequest){
-        this.sessionService.get(sessionUpdateRequest.getId());
-        Session updateSession = this.modelMapperService.forRequest().map(sessionUpdateRequest, Session.class);
-        this.sessionService.update(updateSession);
-        return ResultHelper.success(this.modelMapperService.forResponse().map(updateSession, SessionResponse.class));
+        return this.sessionService.update(sessionUpdateRequest);
     }
-
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Result delete(@PathVariable Long id){

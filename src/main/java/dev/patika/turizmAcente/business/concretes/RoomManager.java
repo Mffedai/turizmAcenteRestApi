@@ -11,7 +11,9 @@ import dev.patika.turizmAcente.core.result.ResultData;
 import dev.patika.turizmAcente.core.utilies.Msg;
 import dev.patika.turizmAcente.core.utilies.ResultHelper;
 import dev.patika.turizmAcente.dao.RoomRepo;
+import dev.patika.turizmAcente.dto.CursorResponse;
 import dev.patika.turizmAcente.dto.request.room.RoomSaveRequest;
+import dev.patika.turizmAcente.dto.request.room.RoomUpdateRequest;
 import dev.patika.turizmAcente.dto.response.room.RoomResponse;
 import dev.patika.turizmAcente.entity.Hotel;
 import dev.patika.turizmAcente.entity.Pension;
@@ -36,21 +38,21 @@ public class RoomManager implements IRoomService {
     private final ISessionService sessionService;
     @Override
     public ResultData<RoomResponse> save(RoomSaveRequest roomSaveRequest) {
-        Optional<Room> roomList = this.roomRepo.findByHotelAndSessionAndPensionAndType(
-                roomSaveRequest.getHotelId(),
-                roomSaveRequest.getSessionId(),
-                roomSaveRequest.getPensionId(),
-                roomSaveRequest.getType().toString()
-        );
-        if (roomList.isPresent()){
-            throw new DataAlreadyExistException(Msg.getEntityForMsg(Room.class));
-        }
         Hotel hotel = this.hotelService.get(Long.valueOf(roomSaveRequest.getHotelId()));
         Pension pension = this.pensionService.get(Long.valueOf(roomSaveRequest.getPensionId()));
         Session session = this.sessionService.get(Long.valueOf(roomSaveRequest.getSessionId()));
         roomSaveRequest.setHotelId(null);
         roomSaveRequest.setPensionId(null);
         roomSaveRequest.setSessionId(null);
+        Optional<Room> roomList = this.findByValueForValid(
+                hotel,
+                session,
+                pension,
+                roomSaveRequest.getType()
+        );
+        if (roomList.isPresent()){
+            throw new DataAlreadyExistException(Msg.getEntityForMsg(Room.class));
+        }
         Room saveRoom = this.modelMapperService.forRequest().map(roomSaveRequest, Room.class);
         saveRoom.setHotel(hotel);
         saveRoom.setPension(pension);
@@ -58,33 +60,31 @@ public class RoomManager implements IRoomService {
         System.out.println(saveRoom);
         return ResultHelper.created(this.modelMapperService.forResponse().map(this.roomRepo.save(saveRoom), RoomResponse.class));
     }
-
     @Override
     public Room get(Long id) {
         return this.roomRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND));
     }
-
     @Override
-    public Page<Room> cursor(int page, int pageSize) {
+    public ResultData<CursorResponse<RoomResponse>> cursor(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        return this.roomRepo.findAll(pageable);
+        Page<Room> roomPage = this.roomRepo.findByStockGreaterThan(0, pageable);
+        Page<RoomResponse> roomResponsePage = roomPage.map(room -> this.modelMapperService.forResponse().map(room, RoomResponse.class));
+        return ResultHelper.cursor(roomResponsePage);
     }
-
     @Override
-    public Room update(Room room) {
-        this.get(room.getId());
-        return this.roomRepo.save(room);
+    public ResultData<RoomResponse> update(RoomUpdateRequest roomUpdateRequest) {
+        this.get(roomUpdateRequest.getId());
+        Room updateRoom = this.modelMapperService.forRequest().map(roomUpdateRequest, Room.class);
+        return ResultHelper.success(this.modelMapperService.forResponse().map(this.roomRepo.save(updateRoom), RoomResponse.class));
     }
-
     @Override
     public boolean delete(Long id) {
         Room room = this.get(id);
         this.roomRepo.delete(room);
         return true;
     }
-
     @Override
-    public Optional<Room> findByValueForValid(Integer hotelId, Integer sessionId, Integer pensionId, String type) {
-        return this.roomRepo.findByHotelAndSessionAndPensionAndType(hotelId, sessionId, pensionId, type);
+    public Optional<Room> findByValueForValid(Hotel hotel, Session session, Pension pension, Room.Type type) {
+        return this.roomRepo.findByHotelAndSessionAndPensionAndType(hotel, session, pension, type);
     }
 }

@@ -20,9 +20,9 @@ public class ReservationSaveRequest {
     @NotNull(message = "Çocuk sayısı alanı boş bırakılamaz")
     private int childNumber;
     @NotNull(message = "Giriş tarihi alanı boş bırakılamaz")
-    private LocalDate entry_date;
+    private LocalDate entryDate;
     @NotNull(message = "Çıkış Tarihi alanı boş bırakılamaz")
-    private LocalDate exit_date;
-    private Integer room_id;
+    private LocalDate exitDate;
+    private Long roomId;
     private List<Guest> guestList;
 }

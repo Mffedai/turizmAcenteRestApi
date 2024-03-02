@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PensionController {
     private final IPensionService pensionService;
-    private final IModelMapperService modelMapperService;
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
@@ -34,18 +33,13 @@ public class PensionController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
     ){
-        Page<Pension> pensionPage = this.pensionService.cursor(page, pageSize);
-        Page<PensionResponse> pensionResponses = pensionPage.map(pension -> this.modelMapperService.forResponse().map(pension, PensionResponse.class));
-        return ResultHelper.cursor(pensionResponses);
+        return this.pensionService.cursor(page, pageSize);
     }
 
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<PensionResponse> update(@Valid @RequestBody PensionUpdateRequest pensionUpdateRequest){
-        this.pensionService.get(pensionUpdateRequest.getId());
-        Pension updatePension = this.modelMapperService.forRequest().map(pensionUpdateRequest, Pension.class);
-        this.pensionService.update(updatePension);
-        return ResultHelper.success(this.modelMapperService.forResponse().map(updatePension, PensionResponse.class));
+        return this.pensionService.update(pensionUpdateRequest);
     }
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

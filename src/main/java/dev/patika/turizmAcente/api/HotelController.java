@@ -23,7 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HotelController {
     private final IHotelService hotelService;
-    private final IModelMapperService modelMapperService;
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<HotelResponse> save(@Valid @RequestBody HotelSaveRequest hotelSaveRequest){
@@ -32,19 +31,14 @@ public class HotelController {
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<HotelResponse> update(@Valid @RequestBody HotelUpdateRequest hotelUpdateRequest){
-        this.hotelService.get(hotelUpdateRequest.getId());
-        Hotel updateHotel = this.modelMapperService.forRequest().map(hotelUpdateRequest, Hotel.class);
-        this.hotelService.update(updateHotel);
-        return ResultHelper.success(this.modelMapperService.forResponse().map(updateHotel, HotelResponse.class));
+        return this.hotelService.update(hotelUpdateRequest);
     }
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CursorResponse<HotelResponse>> cursor(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        Page<Hotel> hotelPage = this.hotelService.cursor(page, pageSize);
-        Page<HotelResponse> hotelResponsePage = hotelPage.map(hotel -> this.modelMapperService.forResponse().map(hotel, HotelResponse.class));
-        return ResultHelper.cursor(hotelResponsePage);
+        return this.hotelService.cursor(page, pageSize);
     }
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

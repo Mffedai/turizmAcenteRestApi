@@ -8,7 +8,9 @@ import dev.patika.turizmAcente.core.result.ResultData;
 import dev.patika.turizmAcente.core.utilies.Msg;
 import dev.patika.turizmAcente.core.utilies.ResultHelper;
 import dev.patika.turizmAcente.dao.HotelRepo;
+import dev.patika.turizmAcente.dto.CursorResponse;
 import dev.patika.turizmAcente.dto.request.hotel.HotelSaveRequest;
+import dev.patika.turizmAcente.dto.request.hotel.HotelUpdateRequest;
 import dev.patika.turizmAcente.dto.response.hotel.HotelResponse;
 import dev.patika.turizmAcente.entity.Hotel;
 import lombok.RequiredArgsConstructor;
@@ -47,15 +49,18 @@ public class HotelManager implements IHotelService {
     }
 
     @Override
-    public Page<Hotel> cursor(int page, int pageSize) {
+    public ResultData<CursorResponse<HotelResponse>> cursor(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        return this.hotelRepo.findAll(pageable);
+        Page<Hotel> hotelPage =  this.hotelRepo.findAll(pageable);
+        Page<HotelResponse> hotelResponsePage = hotelPage.map(hotel -> this.modelMapperService.forResponse().map(hotel, HotelResponse.class));
+        return ResultHelper.cursor(hotelResponsePage);
     }
 
     @Override
-    public Hotel update(Hotel hotel) {
-        this.get(hotel.getId());
-        return this.hotelRepo.save(hotel);
+    public ResultData<HotelResponse> update(HotelUpdateRequest hotelUpdateRequest) {
+        this.get(hotelUpdateRequest.getId());
+        Hotel updateHotel = this.modelMapperService.forRequest().map(hotelUpdateRequest, Hotel.class);
+        return ResultHelper.success(this.modelMapperService.forResponse().map(this.hotelRepo.save(updateHotel), HotelResponse.class));
     }
 
     @Override
