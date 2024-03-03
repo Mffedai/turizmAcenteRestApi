@@ -23,21 +23,21 @@ This project encompasses an API developed to manage the operations of a tourism 
 Here are some screenshots from the project.
 
 #### UML Diagram :
-![UMLDiagram](VetProgram/images/umlDiagram.png)
+![UMLDiagram](images/umlDiagram.png)
 
 ##### Login Screen can be displayed in 2 different ways.
 If the logged-in user is an employee, they have authorization for hotel, pension, season, room, and reservation operations. If the logged-in user is an admin, they have additional privileges such as adding, deleting, updating users, and assigning roles.
 
-![FormLogin](VetProgram/images/swagger1.png)
-![HttpBasic](VetProgram/images/swagger2.png)
+![FormLogin](images/formLogin.png)
+![HttpBasic](images/httpBasic.png)
 
 #### PostgreSql Database Tables
 ![databaseTable](images/databaseTable.png)
 
 ##### Layered Architecture
-![layer1](VetProgram/images/layer1.png)
-![layer2](VetProgram/images/layer2.png)
-![layer3](VetProgram/images/layer2.png)
+![layer1](images/layer1.png)
+![layer2](images/layer2.png)
+![layer3](images/layer3.png)
 
 
 
