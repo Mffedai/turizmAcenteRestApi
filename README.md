@@ -32,7 +32,7 @@ If the logged-in user is an employee, they have authorization for hotel, pension
 ![HttpBasic](VetProgram/images/swagger2.png)
 
 #### PostgreSql Database Tables
-![databaseTable](VetProgram/images/swagger1.png)
+![databaseTable](images/databaseTable.png)
 
 ##### Layered Architecture
 ![layer1](VetProgram/images/layer1.png)
