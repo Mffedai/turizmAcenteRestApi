@@ -29,7 +29,7 @@ Here are some screenshots from the project.
 If the logged-in user is an employee, they have authorization for hotel, pension, season, room, and reservation operations. If the logged-in user is an admin, they have additional privileges such as adding, deleting, updating users, and assigning roles.
 
 ![FormLogin](images/formLogin.png)
-![HttpBasic](images/httpBasic.png)
+![HttpLogin](images/httpLogin.png)
 
 #### PostgreSql Database Tables
 ![databaseTable](images/databaseTable.png)
