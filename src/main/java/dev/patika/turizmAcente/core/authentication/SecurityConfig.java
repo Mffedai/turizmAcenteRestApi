@@ -32,8 +32,8 @@ public class SecurityConfig {
                     registry.requestMatchers("/v1/guests/**").hasAnyRole("ADMIN","EMPLOYEE");
                     registry.anyRequest().authenticated();
                 })
-                //.formLogin(AbstractAuthenticationFilterConfigurer:: permitAll)
-                .httpBasic(Customizer.withDefaults())
+                .formLogin(AbstractAuthenticationFilterConfigurer:: permitAll)
+                //.httpBasic(Customizer.withDefaults())
                 .build();
     }
     @Bean
